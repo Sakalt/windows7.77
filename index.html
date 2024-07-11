@@ -2,124 +2,96 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Windows 7.77</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="lock-screen">
-        <div class="window">
-            <div class="window-header">ロック画面</div>
-            <div class="window-content">
-                <input type="password" id="password-input" placeholder="パスワードを入力">
-                <button id="unlock-button">解除</button>
-            </div>
-        </div>
+    <div id="gif-screen">
+        <img src="loading.gif" alt="Loading">
     </div>
+
+    <div id="lock-screen">
+        <input type="password" id="password-input" placeholder="パスワード">
+        <button id="unlock-button">ロック解除</button>
+    </div>
+
     <div id="loading-screen">
         <img src="loading.gif" alt="Loading">
-        <div class="message">please wait...</div>
+        <p>Please wait...</p>
     </div>
-    <div id="desktop">
-        <img src="wallpaper.jpg" id="wallpaper" alt="壁紙">
-        <div class="taskbar">
-            <div id="start-menu-icon" class="taskbar-icon">スタート</div>
-        </div>
-        <div id="start-menu">
+
+    <div id="desktop" style="display: none;">
+        <img src="壁紙.jpg" alt="壁紙" id="wallpaper">
+        <div id="start-menu-icon"></div>
+        <div id="start-menu" style="display: none;">
             <ul>
                 <li id="start-file-explorer">ファイルエクスプローラー</li>
                 <li id="start-notepad">メモ帳</li>
                 <li id="start-calendar">カレンダー</li>
                 <li id="start-camera">カメラ</li>
-                <li id="start-browser">ブラウザ</li>
+                <li id="start-browser">インターネットブラウザ</li>
                 <li id="start-control-panel">コントロールパネル</li>
                 <li id="start-command-prompt">コマンドプロンプト</li>
                 <li id="start-setup">セットアップ</li>
             </ul>
         </div>
-        <div id="file-explorer-window" class="window">
-            <div class="window-header">
-                ファイルエクスプローラー
-                <div class="window-control close">×</div>
-            </div>
-            <div class="window-content" id="file-list"></div>
+
+        <div class="window" id="file-explorer-window" style="display: none;">
+            <div class="window-header">ファイルエクスプローラー <span class="window-control close">×</span></div>
+            <div class="window-content">ファイルエクスプローラーの内容</div>
         </div>
-        <div id="notepad-window" class="window">
-            <div class="window-header">
-                メモ帳
-                <div class="window-control close">×</div>
-            </div>
+
+        <div class="window" id="notepad-window" style="display: none;">
+            <div class="window-header">メモ帳 <span class="window-control close">×</span></div>
+            <div class="window-content"><textarea></textarea></div>
+        </div>
+
+        <div class="window" id="calendar-window" style="display: none;">
+            <div class="window-header">カレンダー <span class="window-control close">×</span></div>
             <div class="window-content">
-                <textarea id="text-area"></textarea>
-                <button id="save-button">保存</button>
+                <p id="date-display"></p>
             </div>
         </div>
-        <div id="calendar-window" class="window">
-            <div class="window-header">
-                カレンダー
-                <div class="window-control close">×</div>
-            </div>
-            <div class="window-content">
-                <div id="date-display"></div>
-            </div>
+
+        <div class="window" id="camera-window" style="display: none;">
+            <div class="window-header">カメラ <span class="window-control close">×</span></div>
+            <div class="window-content"><video autoplay></video></div>
         </div>
-        <div id="camera-window" class="window">
-            <div class="window-header">
-                カメラ
-                <div class="window-control close">×</div>
-            </div>
-            <div class="window-content">
-                <video autoplay></video>
-            </div>
-        </div>
-        <div id="browser-window" class="window">
-            <div class="window-header">
-                ブラウザ
-                <div class="window-control close">×</div>
-            </div>
+
+        <div class="window" id="browser-window" style="display: none;">
+            <div class="window-header">ブラウザ <span class="window-control close">×</span></div>
             <div class="window-content">
                 <input type="text" id="url-input" placeholder="URLを入力">
-                <button id="go-button">移動</button>
+                <button id="go-button">Go</button>
                 <iframe id="browser-frame"></iframe>
             </div>
         </div>
-        <div id="control-panel-window" class="window">
-            <div class="window-header">
-                コントロールパネル
-                <div class="window-control close">×</div>
-            </div>
+
+        <div class="window" id="control-panel-window" style="display: none;">
+            <div class="window-header">コントロールパネル <span class="window-control close">×</span></div>
             <div class="window-content">
-                <form id="settings-form">
-                    <label>設定項目1: <input type="text" name="setting1"></label><br>
-                    <label>設定項目2: <input type="text" name="setting2"></label><br>
-                    <button type="button" id="save-settings-button">保存</button>
-                </form>
+                <button id="save-settings-button">設定を保存</button>
             </div>
         </div>
-        <div id="command-prompt-window" class="window">
-            <div class="window-header">
-                コマンドプロンプト
-                <div class="window-control close">×</div>
-            </div>
+
+        <div class="window" id="command-prompt-window" style="display: none;">
+            <div class="window-header">コマンドプロンプト <span class="window-control close">×</span></div>
             <div class="window-content">
                 <textarea id="output-area" readonly></textarea>
                 <input type="text" id="command-input" placeholder="コマンドを入力">
                 <button id="execute-button">実行</button>
             </div>
         </div>
-        <div id="setup-window" class="window">
-            <div class="window-header">
-                セットアップ
-                <div class="window-control close">×</div>
-            </div>
+
+        <div class="window" id="setup-window" style="display: none;">
+            <div class="window-header">セットアップ <span class="window-control close">×</span></div>
             <div class="window-content">
-                <form id="setup-form">
-                    <label>項目1: <input type="text" name="item1"></label><br>
-                    <label>項目2: <input type="text" name="item2"></label><br>
-                    <button type="button" id="save-setup-button">保存</button>
-                </form>
+                <button id="save-setup-button">セットアップを保存</button>
             </div>
         </div>
     </div>
+
     <script src="app.js"></script>
 </body>
 </html>
