@@ -5,56 +5,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const desktop = document.getElementById('desktop');
     const passwordInput = document.getElementById('password-input');
     const unlockButton = document.getElementById('unlock-button');
-    
-    // スタートメニュー関連
-    const startMenuIcon = document.getElementById('start-menu-icon');
+    const startMenuIcon = document.getElementById('start-button');
     const startMenu = document.getElementById('start-menu');
-
-    // ウィンドウ関連
-    const windows = document.querySelectorAll('.window');
     const closeButtons = document.querySelectorAll('.window-control.close');
-
-    // ファイルエクスプローラー関連
     const startFileExplorer = document.getElementById('start-file-explorer');
     const fileExplorerWindow = document.getElementById('file-explorer-window');
-    
-    // メモ帳関連
     const startNotepad = document.getElementById('start-notepad');
     const notepadWindow = document.getElementById('notepad-window');
-    
-    // カレンダー関連
     const startCalendar = document.getElementById('start-calendar');
     const calendarWindow = document.getElementById('calendar-window');
     const dateDisplay = document.getElementById('date-display');
-    
-    // カメラ関連
     const startCamera = document.getElementById('start-camera');
     const cameraWindow = document.getElementById('camera-window');
     const video = document.querySelector('video');
-    
-    // ブラウザ関連
     const startBrowser = document.getElementById('start-browser');
     const browserWindow = document.getElementById('browser-window');
     const urlInput = document.getElementById('url-input');
     const goButton = document.getElementById('go-button');
     const browserFrame = document.getElementById('browser-frame');
-    
-    // コントロールパネル関連
     const startControlPanel = document.getElementById('start-control-panel');
     const controlPanelWindow = document.getElementById('control-panel-window');
     const saveSettingsButton = document.getElementById('save-settings-button');
-    
-    // コマンドプロンプト関連
     const startCommandPrompt = document.getElementById('start-command-prompt');
     const commandPromptWindow = document.getElementById('command-prompt-window');
     const commandInput = document.getElementById('command-input');
     const executeButton = document.getElementById('execute-button');
     const outputArea = document.getElementById('output-area');
-    
-    // セットアップ関連
     const startSetup = document.getElementById('start-setup');
     const setupWindow = document.getElementById('setup-window');
     const saveSetupButton = document.getElementById('save-setup-button');
+    const startPaint = document.getElementById('start-paint');
+    const paintWindow = document.getElementById('paint-window');
 
     // 最初のGIF画面の表示時間
     setTimeout(() => {
@@ -79,11 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // スタートメニューの表示/非表示
     startMenuIcon.addEventListener('click', () => {
-        if (startMenu.style.display === 'block') {
-            startMenu.style.display = 'none';
-        } else {
-            startMenu.style.display = 'block';
-        }
+        startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block';
     });
 
     // ウィンドウを閉じる
@@ -163,7 +140,13 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('セットアップが保存されました');
     });
 
+    // ペイントを開く
+    startPaint.addEventListener('click', () => {
+        paintWindow.style.display = 'block';
+    });
+
     // ドラッグ可能なウィンドウ
+    const windows = document.querySelectorAll('.window');
     windows.forEach(win => {
         const header = win.querySelector('.window-header');
         header.addEventListener('mousedown', (e) => {
