@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const gifScreen = document.getElementById('gif-screen');
     const lockScreen = document.getElementById('lock-screen');
     const loadingScreen = document.getElementById('loading-screen');
     const desktop = document.getElementById('desktop');
@@ -54,6 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const startSetup = document.getElementById('start-setup');
     const setupWindow = document.getElementById('setup-window');
     const saveSetupButton = document.getElementById('save-setup-button');
+
+    // 最初のGIF画面の表示時間
+    setTimeout(() => {
+        gifScreen.style.display = 'none';
+        lockScreen.style.display = 'flex';
+    }, 3000); // 3秒表示
 
     // ロック画面の解除
     unlockButton.addEventListener('click', () => {
