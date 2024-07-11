@@ -8,6 +8,9 @@ body, html {
     align-items: center;
     justify-content: center;
     background-color: #000;
+    background-image: url('wallpaper.png');
+    background-size: cover;
+    background-position: center;
 }
 
 #gif-screen {
