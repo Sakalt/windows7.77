@@ -23,7 +23,11 @@
 
     <div id="desktop" style="display: none;">
         <img src="壁紙.jpg" alt="壁紙" id="wallpaper">
-        <div id="start-menu-icon"></div>
+        <div id="start-bar">
+            <div id="start-button">
+                <img src="img/vista_start.png" alt="Start">
+            </div>
+        </div>
         <div id="start-menu" style="display: none;">
             <ul>
                 <li id="start-file-explorer">ファイルエクスプローラー</li>
@@ -33,6 +37,7 @@
                 <li id="start-browser">インターネットブラウザ</li>
                 <li id="start-control-panel">コントロールパネル</li>
                 <li id="start-command-prompt">コマンドプロンプト</li>
+                <li id="start-paint">ペイント</li> <!-- ペイントの追加 -->
                 <li id="start-setup">セットアップ</li>
             </ul>
         </div>
@@ -81,6 +86,13 @@
                 <textarea id="output-area" readonly></textarea>
                 <input type="text" id="command-input" placeholder="コマンドを入力">
                 <button id="execute-button">実行</button>
+            </div>
+        </div>
+
+        <div class="window" id="paint-window" style="display: none;">
+            <div class="window-header">ペイント <span class="window-control close">×</span></div>
+            <div class="window-content">
+                <canvas id="paint-canvas"></canvas>
             </div>
         </div>
 
