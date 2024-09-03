@@ -26,10 +26,12 @@
 
         const images = {
             vista: new Image(),
-            longhorn: new Image()
+            longhorn: new Image(),
+            food: new Image()
         };
-        images.vista.src = 'img/vista_start.png';
+        images.vista.src = 'img/vista.png';
         images.longhorn.src = 'img/longhorn.png';
+        images.food.src = 'img/food.png';
 
         const backgroundMusic = document.getElementById('backgroundMusic');
         const collisionSound = document.getElementById('collisionSound');
@@ -37,7 +39,7 @@
         let characterVista = {
             x: 100,
             y: 100,
-            width: 30, // Vistaのキャラクターは小さくする
+            width: 30,
             height: 30,
             image: images.vista,
             dx: 1.5,
@@ -49,7 +51,7 @@
         let characterLonghorn = {
             x: 200,
             y: 200,
-            width: 50, // Longhornのキャラクターはデフォルトサイズ
+            width: 50,
             height: 50,
             image: images.longhorn,
             dx: 2,
@@ -57,6 +59,11 @@
             energy: 100,
             level: 1
         };
+
+        const foodItems = [
+            { x: 400, y: 150, width: 20, height: 20 },
+            { x: 600, y: 300, width: 20, height: 20 }
+        ];
 
         function drawCharacter(character) {
             ctx.drawImage(character.image, character.x, character.y, character.width, character.height);
@@ -90,6 +97,12 @@
             });
         }
 
+        function drawFood() {
+            foodItems.forEach(food => {
+                ctx.drawImage(images.food, food.x, food.y, food.width, food.height);
+            });
+        }
+
         function updateDisplay() {
             document.getElementById('scoreboard').textContent = `エネルギー: ${characterVista.energy} | レベル: ${characterVista.level}`;
         }
@@ -114,37 +127,52 @@
             updateDisplay();
         }
 
+        function checkCollision(character) {
+            foodItems.forEach((food, index) => {
+                if (character.x < food.x + food.width &&
+                    character.x + character.width > food.x &&
+                    character.y < food.y + food.height &&
+                    character.y + character.height > food.y) {
+                        character.energy += 20; // 食べ物を食べた時のエネルギー回復量
+                        if (character.energy > 100) character.energy = 100;
+                        foodItems.splice(index, 1); // 食べ物を削除
+                        updateDisplay();
+                }
+            });
+        }
+
         function moveCharacter(character) {
             character.x += character.dx;
             character.y += character.dy;
 
             if (character.x < 0 || character.x + character.width > canvas.width) {
                 character.dx *= -1;
-                character.image = (character.image === images.vista) ? images.longhorn : images.vista;
-                collisionSound.play();
             }
             if (character.y < 0 || character.y + character.height > canvas.height) {
                 character.dy *= -1;
-                character.image = (character.image === images.vista) ? images.longhorn : images.vista;
-                collisionSound.play();
             }
         }
 
         function gameLoop() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawHouse();
+            drawObstacles();
+            drawFood();
             moveCharacter(characterVista);
             moveCharacter(characterLonghorn);
             drawCharacter(characterVista);
             drawCharacter(characterLonghorn);
-            drawObstacles();
+            checkCollision(characterVista);
+            checkCollision(characterLonghorn);
             requestAnimationFrame(gameLoop);
         }
 
         images.vista.onload = () => {
             images.longhorn.onload = () => {
-                backgroundMusic.play();
-                gameLoop();
+                images.food.onload = () => {
+                    backgroundMusic.play();
+                    gameLoop();
+                };
             };
         };
     </script>
