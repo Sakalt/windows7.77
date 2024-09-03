@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>育成ゲーム</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; }
+        canvas { display: block; margin: 0 auto; background: #f0f0f0; }
+        #scoreboard { text-align: center; margin: 10px; }
+        #controls { text-align: center; margin: 10px; }
+    </style>
+</head>
+<body>
+    <div id="scoreboard">エネルギー: 100 | レベル: 1</div>
+    <div id="controls">
+        <button onclick="feedCharacter()">食べ物をあげる</button>
+        <button onclick="trainCharacter()">トレーニングする</button>
+    </div>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <audio id="backgroundMusic" src="background.mp3" loop></audio>
+    <audio id="collisionSound" src="collision.mp3"></audio>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const images = {
+            vista: new Image(),
+            longhorn: new Image()
+        };
+        images.vista.src = 'img/vista_start.png';
+        images.longhorn.src = 'img/longhorn.png';
+
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const collisionSound = document.getElementById('collisionSound');
+
+        let characterVista = {
+            x: 100,
+            y: 100,
+            width: 30, // Vistaのキャラクターは小さくする
+            height: 30,
+            image: images.vista,
+            dx: 1.5,
+            dy: 1.5,
+            energy: 100,
+            level: 1
+        };
+
+        let characterLonghorn = {
+            x: 200,
+            y: 200,
+            width: 50, // Longhornのキャラクターはデフォルトサイズ
+            height: 50,
+            image: images.longhorn,
+            dx: 2,
+            dy: 2,
+            energy: 100,
+            level: 1
+        };
+
+        function drawCharacter(character) {
+            ctx.drawImage(character.image, character.x, character.y, character.width, character.height);
+        }
+
+        function drawHouse() {
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(300, 400, 100, 100);
+            ctx.fillStyle = '#f5deb3'; 
+            ctx.fillRect(300, 400, 100, 100);
+
+            ctx.beginPath();
+            ctx.moveTo(290, 400);
+            ctx.lineTo(350, 350);
+            ctx.lineTo(410, 400);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.fillStyle = '#d2691e';
+            ctx.fill();
+        }
+
+        function drawObstacles() {
+            const obstacles = [
+                { x: 200, y: 200, width: 50, height: 50, color: 'red' },
+                { x: 400, y: 300, width: 50, height: 50, color: 'green' }
+            ];
+            obstacles.forEach(obstacle => {
+                ctx.fillStyle = obstacle.color;
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            });
+        }
+
+        function updateDisplay() {
+            document.getElementById('scoreboard').textContent = `エネルギー: ${characterVista.energy} | レベル: ${characterVista.level}`;
+        }
+
+        function feedCharacter() {
+            characterVista.energy += 10;
+            characterLonghorn.energy += 10;
+            if (characterVista.energy > 100) characterVista.energy = 100;
+            if (characterLonghorn.energy > 100) characterLonghorn.energy = 100;
+            updateDisplay();
+        }
+
+        function trainCharacter() {
+            if (characterVista.energy > 0) {
+                characterVista.energy -= 10;
+                characterVista.level += 1;
+            }
+            if (characterLonghorn.energy > 0) {
+                characterLonghorn.energy -= 10;
+                characterLonghorn.level += 1;
+            }
+            updateDisplay();
+        }
+
+        function moveCharacter(character) {
+            character.x += character.dx;
+            character.y += character.dy;
+
+            if (character.x < 0 || character.x + character.width > canvas.width) {
+                character.dx *= -1;
+                character.image = (character.image === images.vista) ? images.longhorn : images.vista;
+                collisionSound.play();
+            }
+            if (character.y < 0 || character.y + character.height > canvas.height) {
+                character.dy *= -1;
+                character.image = (character.image === images.vista) ? images.longhorn : images.vista;
+                collisionSound.play();
+            }
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawHouse();
+            moveCharacter(characterVista);
+            moveCharacter(characterLonghorn);
+            drawCharacter(characterVista);
+            drawCharacter(characterLonghorn);
+            drawObstacles();
+            requestAnimationFrame(gameLoop);
+        }
+
+        images.vista.onload = () => {
+            images.longhorn.onload = () => {
+                backgroundMusic.play();
+                gameLoop();
+            };
+        };
+    </script>
+</body>
+</html>
