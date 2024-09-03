@@ -24,14 +24,15 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
+        // 画像のロード
         const images = {
             vista: new Image(),
             longhorn: new Image(),
             food: new Image()
         };
-        images.vista.src = 'img/vista.png';
-        images.longhorn.src = 'img/longhorn.png';
-        images.food.src = 'img/food.png';
+        images.vista.src = 'img/vista.png'; // 正しいパスを指定してください
+        images.longhorn.src = 'img/longhorn.png'; // 正しいパスを指定してください
+        images.food.src = 'img/food.png'; // 正しいパスを指定してください
 
         const backgroundMusic = document.getElementById('backgroundMusic');
         const collisionSound = document.getElementById('collisionSound');
@@ -70,12 +71,14 @@
         }
 
         function drawHouse() {
+            // 家の描画
             ctx.strokeStyle = 'black';
             ctx.lineWidth = 3;
-            ctx.strokeRect(300, 400, 100, 100);
+            ctx.strokeRect(300, 400, 100, 100); // 家の本体
             ctx.fillStyle = '#f5deb3'; 
-            ctx.fillRect(300, 400, 100, 100);
+            ctx.fillRect(300, 400, 100, 100); // 家の中のベージュ部分
 
+            // 屋根の描画
             ctx.beginPath();
             ctx.moveTo(290, 400);
             ctx.lineTo(350, 350);
@@ -133,9 +136,9 @@
                     character.x + character.width > food.x &&
                     character.y < food.y + food.height &&
                     character.y + character.height > food.y) {
-                        character.energy += 20; // 食べ物を食べた時のエネルギー回復量
+                        character.energy += 20;
                         if (character.energy > 100) character.energy = 100;
-                        foodItems.splice(index, 1); // 食べ物を削除
+                        foodItems.splice(index, 1);
                         updateDisplay();
                 }
             });
