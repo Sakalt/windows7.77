@@ -24,15 +24,12 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        // 画像のロード
         const images = {
             vista: new Image(),
-            longhorn: new Image(),
-            food: new Image()
+            longhorn: new Image()
         };
-        images.vista.src = 'img/vista.png'; // 正しいパスを指定してください
-        images.longhorn.src = 'img/longhorn.png'; // 正しいパスを指定してください
-        images.food.src = 'img/food.png'; // 正しいパスを指定してください
+        images.vista.src = 'img/vista.png';
+        images.longhorn.src = 'img/longhorn.png';
 
         const backgroundMusic = document.getElementById('backgroundMusic');
         const collisionSound = document.getElementById('collisionSound');
@@ -61,24 +58,17 @@
             level: 1
         };
 
-        const foodItems = [
-            { x: 400, y: 150, width: 20, height: 20 },
-            { x: 600, y: 300, width: 20, height: 20 }
-        ];
-
         function drawCharacter(character) {
             ctx.drawImage(character.image, character.x, character.y, character.width, character.height);
         }
 
         function drawHouse() {
-            // 家の描画
             ctx.strokeStyle = 'black';
             ctx.lineWidth = 3;
-            ctx.strokeRect(300, 400, 100, 100); // 家の本体
+            ctx.strokeRect(300, 400, 100, 100);
             ctx.fillStyle = '#f5deb3'; 
-            ctx.fillRect(300, 400, 100, 100); // 家の中のベージュ部分
+            ctx.fillRect(300, 400, 100, 100);
 
-            // 屋根の描画
             ctx.beginPath();
             ctx.moveTo(290, 400);
             ctx.lineTo(350, 350);
@@ -97,12 +87,6 @@
             obstacles.forEach(obstacle => {
                 ctx.fillStyle = obstacle.color;
                 ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-            });
-        }
-
-        function drawFood() {
-            foodItems.forEach(food => {
-                ctx.drawImage(images.food, food.x, food.y, food.width, food.height);
             });
         }
 
@@ -130,52 +114,35 @@
             updateDisplay();
         }
 
-        function checkCollision(character) {
-            foodItems.forEach((food, index) => {
-                if (character.x < food.x + food.width &&
-                    character.x + character.width > food.x &&
-                    character.y < food.y + food.height &&
-                    character.y + character.height > food.y) {
-                        character.energy += 20;
-                        if (character.energy > 100) character.energy = 100;
-                        foodItems.splice(index, 1);
-                        updateDisplay();
-                }
-            });
-        }
-
         function moveCharacter(character) {
             character.x += character.dx;
             character.y += character.dy;
 
             if (character.x < 0 || character.x + character.width > canvas.width) {
                 character.dx *= -1;
+                collisionSound.play();
             }
             if (character.y < 0 || character.y + character.height > canvas.height) {
                 character.dy *= -1;
+                collisionSound.play();
             }
         }
 
         function gameLoop() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawHouse();
-            drawObstacles();
-            drawFood();
             moveCharacter(characterVista);
             moveCharacter(characterLonghorn);
             drawCharacter(characterVista);
             drawCharacter(characterLonghorn);
-            checkCollision(characterVista);
-            checkCollision(characterLonghorn);
+            drawObstacles();
             requestAnimationFrame(gameLoop);
         }
 
         images.vista.onload = () => {
             images.longhorn.onload = () => {
-                images.food.onload = () => {
-                    backgroundMusic.play();
-                    gameLoop();
-                };
+                backgroundMusic.play();
+                gameLoop();
             };
         };
     </script>
