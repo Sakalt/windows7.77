@@ -139,11 +139,12 @@
             requestAnimationFrame(gameLoop);
         }
 
-        images.vista.onload = () => {
-            images.longhorn.onload = () => {
+        // 画像の読み込み完了後にゲームを開始
+        images.vista.onload = images.longhorn.onload = function() {
+            if (images.vista.complete && images.longhorn.complete) {
                 backgroundMusic.play();
                 gameLoop();
-            };
+            }
         };
     </script>
 </body>
